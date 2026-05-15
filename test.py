@@ -1,6 +1,9 @@
 import requests
+from dotenv import load_dotenv
+import os
 
-IQAIR_API_KEY = "f99a1c7f-2992-404f-8e85-0c54d8aa3de9"
+load_dotenv()
+IQAIR_API_KEY = os.getenv("IQAIR_API_KEY")
 
 url = f"http://api.airvisual.com/v2/cities?state=Almaty Oblysy&country=Kazakhstan&key={IQAIR_API_KEY}"
 
