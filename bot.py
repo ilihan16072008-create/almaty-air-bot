@@ -10,8 +10,7 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 IQAIR_API_KEY = os.getenv("IQAIR_API_KEY")
 
-# Список пользователей которые подписались на уведомления
-# Здесь хранятся их chat_id — уникальный номер каждого пользователя
+
 subscribers = set()
 
 
@@ -61,7 +60,7 @@ async def air(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-# Когда пользователь пишет /subscribe — добавляем его chat_id в список
+
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id  # уникальный номер этого чата
     subscribers.add(chat_id)  # добавляем в список подписчиков
@@ -71,21 +70,21 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-# Когда пользователь пишет /unsubscribe — убираем его из списка
+# unsuscribe убрать из списка 
 async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
     subscribers.discard(chat_id)  # убираем из списка (discard не даёт ошибку если нет)
     await update.message.reply_text("❌ Ты отписался от уведомлений.")
 
 
-# Эта функция запускается каждый день в 8:00 автоматически
+# утренее уведомление об уровне загрязнения 
 async def send_morning_notification(app):
     aqi = get_aqi()
     advice = get_advice(aqi)
     message = (
         f"🌅 Доброе утро! Вот AQI Алматы на сегодня:\n" f"AQI: {aqi}\n\n" f"{advice}"
     )
-    # Отправляем сообщение каждому подписчику
+    # отправка сообщениия каждому пользователю чата
     for chat_id in subscribers:
         await app.bot.send_message(chat_id=chat_id, text=message)
 
