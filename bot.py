@@ -62,29 +62,28 @@ async def air(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.message.chat_id  # уникальный номер этого чата
-    subscribers.add(chat_id)  # добавляем в список подписчиков
+    chat_id = update.message.chat_id  
+    subscribers.add(chat_id)  
     await update.message.reply_text(
         "✅ Ты подписался на утренние уведомления!\n"
         "Каждый день в 8:00 я буду присылать тебе AQI Алматы."
     )
 
 
-# unsuscribe убрать из списка 
 async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
-    subscribers.discard(chat_id)  # убираем из списка (discard не даёт ошибку если нет)
+    subscribers.discard(chat_id) 
     await update.message.reply_text("❌ Ты отписался от уведомлений.")
 
 
-# утренее уведомление об уровне загрязнения 
+
 async def send_morning_notification(app):
     aqi = get_aqi()
     advice = get_advice(aqi)
     message = (
         f"🌅 Доброе утро! Вот AQI Алматы на сегодня:\n" f"AQI: {aqi}\n\n" f"{advice}"
     )
-    # отправка сообщениия каждому пользователю чата
+    
     for chat_id in subscribers:
         await app.bot.send_message(chat_id=chat_id, text=message)
 
@@ -108,7 +107,7 @@ async def main():
         await app.start()
         print("Бот запущен!")
         await app.updater.start_polling()
-        await asyncio.Event().wait()  # ждём бесконечно
+        await asyncio.Event().wait()  
 
 
 if __name__ == "__main__":
